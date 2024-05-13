@@ -15,6 +15,7 @@ let isSign = true;
 for (item of buttons) {
     item.addEventListener("click", (e) => {
         buttonText = e.target.innerText;
+        // multiply
         if (buttonText == "x" && !isSign) {
             if (flag == 1) {
                 flag = 0;
@@ -23,6 +24,7 @@ for (item of buttons) {
             isSign = true;
             screenValue += buttonText;
             screen.value = screenValue;
+        // clear
         } else if (buttonText == "C") {
             if (flag == 1) {
                 flag = 0;
@@ -31,6 +33,18 @@ for (item of buttons) {
             screen.value = screenValue;
             screen.classList.remove("negative"); // Remove negative class
             isSign = true;
+        // backspace
+        } else if (buttonText == "CE") {
+            if (flag == 1) {
+                flag = 0;
+            }
+            if (screenValue.length > 0) { // Check if screenValue is not empty
+                screenValue = screenValue.slice(0, -1); // Remove the last character
+            }
+            screen.value = screenValue;
+            screen.classList.remove("negative"); // Remove negative class
+            isSign = true;
+        // equals
         } else if (buttonText == "=") {
             checkForBracketMulti();
             if (parseFloat(screen.value) < 0) {
@@ -38,6 +52,7 @@ for (item of buttons) {
             } else {
                 screen.classList.remove("negative");
             }
+        // divide
         } else if (buttonText == "÷" && !isSign) {
             if (flag == 1) {
                 flag = 0;
@@ -46,27 +61,45 @@ for (item of buttons) {
             isSign = true;
             screenValue += buttonText;
             screen.value = screenValue;
-        } else if (buttonText == "x" && !isSign) {
-            if (flag == 1) {
-                flag = 0;
-            }
-            buttonText = "%";
-            isSign = true;
-            screenValue += buttonText;
+        // percent
+        } else if (buttonText == "%" && !isSign) {
+            const percentage = parseFloat(screenValue) / 100;
+            screenValue = percentage.toString();
             screen.value = screenValue;
-            document.addEventListener("keydown", function(event) {
-                if (event.key === "Enter") {
-                    const percentage = parseFloat(screenValue) / 100;
-                    screenValue = percentage.toString();
-                    screen.value = screenValue; } });
+        // sqrt
+        } else if (buttonText == "√" && !isSign) {
+            const sqrt = Math.sqrt(parseFloat(screenValue));
+            screenValue = sqrt.toString();
+            screen.value = screenValue;
+        // pi
+        } else if (buttonText == "π") {
+            screenValue += "3.14159265359";
+            screen.value = screenValue;
+        // parenthesis
         } else if(buttonText=="(" || buttonText==")") {
             if(flag==1){
                 flag =0;
             }
             screenValue+=buttonText;
             screen.value=screenValue;
-        }
-        else if (isNumber(buttonText)) {
+        // neg
+        } else if (buttonText == "+/-") {
+            if (screenValue !== "0") {
+                if (screenValue[0] !== "-") {
+                    screenValue = "-" + screenValue;
+                } else {
+                    screenValue = screenValue.slice(1);
+                }
+                screen.value = screenValue;
+            }
+        // exponent
+        } else if (buttonText == "x²") {
+            const currentNumber = parseFloat(screenValue);
+            const exponent = prompt("Enter the exponent value:");
+            const newNumber = Math.pow(currentNumber, exponent);
+            screenValue = newNumber.toString();
+            screen.value = screenValue;
+        } else if (isNumber(buttonText)) {
             if (flag == 1) {
                 screenValue = buttonText;
                 flag = 0;
